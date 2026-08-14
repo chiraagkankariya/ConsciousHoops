@@ -11,6 +11,7 @@ import { RulerCarousel, type CarouselItem } from "@/components/ui/ruler-carousel
 import EventMasonry, { type GalleryPhoto } from "@/components/ui/event-masonry";
 import HeroVideoPanel from "@/components/ui/hero-video-panel";
 import EchoText from "@/components/ui/echo-text";
+import LoadingScreen from "@/components/ui/loading-screen";
 import { HERO_VIDEOS } from "@/lib/hero-videos";
 import p1 from "@/assets/IMG_2995.jpg.asset.json";
 import p2 from "@/assets/IMG_3005.jpg.asset.json";
@@ -87,6 +88,9 @@ const INVITEE_ROLES: CarouselItem[] = [
 
 function Index() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [videos, setVideos] = useState<string[]>(HERO_VIDEOS);
+  const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -96,11 +100,65 @@ function Index() {
     scrollRef.current?.scrollTo(0, 0);
   }, []);
 
+  // Preload the first hero video with byte-level progress. Once done, swap in a
+  // blob URL so the video element plays instantly. Fail-open after 20s so a slow
+  // connection can't strand the visitor on the loader.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let cancelled = false;
+    const controller = new AbortController();
+    let objectUrl: string | null = null;
+    const fallbackTimer = setTimeout(() => {
+      if (!cancelled) setIsLoading(false);
+    }, 20000);
+
+    (async () => {
+      try {
+        const res = await fetch(HERO_VIDEOS[0], { signal: controller.signal });
+        if (!res.ok || !res.body) throw new Error("bad response");
+        const total = Number(res.headers.get("Content-Length") || 0);
+        const reader = res.body.getReader();
+        const chunks: Uint8Array[] = [];
+        let received = 0;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (cancelled) return;
+          chunks.push(value);
+          received += value.length;
+          if (total > 0) setProgress(Math.round((received / total) * 100));
+        }
+        if (cancelled) return;
+        const blob = new Blob(chunks as BlobPart[], {
+          type: res.headers.get("Content-Type") || "video/mp4",
+        });
+        objectUrl = URL.createObjectURL(blob);
+        setVideos((prev) => [objectUrl!, ...prev.slice(1)]);
+        setProgress(100);
+        setTimeout(() => {
+          if (!cancelled) setIsLoading(false);
+        }, 350);
+      } catch {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+      clearTimeout(fallbackTimer);
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, []);
+
   return (
     <div className="grain min-h-screen overflow-x-hidden bg-ink text-cream">
+      <AnimatePresence>
+        {isLoading && <LoadingScreen key="loader" progress={progress} />}
+      </AnimatePresence>
       {/* Left: fixed looping video panel (desktop only) */}
       <div className="video-panel hidden md:block">
-        <HeroVideoPanel videos={HERO_VIDEOS} />
+        <HeroVideoPanel videos={videos} />
       </div>
 
       {/* Right: independently scrolling content */}
@@ -113,7 +171,7 @@ function Index() {
       >
         {/* Mobile hero video — fullbleed at top so the cinematic feel carries on phones. */}
         <div className="relative h-[55vh] w-full overflow-hidden md:hidden">
-          <HeroVideoPanel videos={HERO_VIDEOS} />
+          <HeroVideoPanel videos={videos} />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-ink" />
         </div>
 

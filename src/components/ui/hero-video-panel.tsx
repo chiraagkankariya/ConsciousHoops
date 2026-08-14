@@ -23,6 +23,26 @@ export default function HeroVideoPanel({ videos }: Props) {
     return () => clearTimeout(timer);
   }, [index, videos.length]);
 
+  // Force play() on every src change. iOS occasionally ignores the autoplay
+  // attribute (Low Power Mode, race with playsInline); fall back to the first
+  // user gesture if the promise rejects.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const attempt = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+    attempt();
+    const onFirstGesture = () => attempt();
+    document.addEventListener("touchstart", onFirstGesture, { once: true, passive: true });
+    document.addEventListener("click", onFirstGesture, { once: true });
+    return () => {
+      document.removeEventListener("touchstart", onFirstGesture);
+      document.removeEventListener("click", onFirstGesture);
+    };
+  }, [index, videos]);
+
   const advance = () => {
     if (videos.length < 2) return;
     setIndex((i) => (i + 1) % videos.length);
@@ -39,8 +59,13 @@ export default function HeroVideoPanel({ videos }: Props) {
             autoPlay
             muted
             playsInline
+            preload="auto"
             loop={videos.length === 1}
             onEnded={advance}
+            onCanPlay={(e) => {
+              const p = (e.currentTarget as HTMLVideoElement).play();
+              if (p && typeof p.catch === "function") p.catch(() => {});
+            }}
             initial={{ opacity: 0, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
