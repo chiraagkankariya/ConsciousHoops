@@ -97,7 +97,7 @@ function Index() {
   }, []);
 
   return (
-    <div className="grain min-h-screen bg-ink text-cream">
+    <div className="grain min-h-screen overflow-x-hidden bg-ink text-cream">
       {/* Left: fixed looping video panel (desktop only) */}
       <div className="video-panel hidden md:block">
         <HeroVideoPanel videos={HERO_VIDEOS} />
@@ -112,7 +112,7 @@ function Index() {
         className="content-panel flex flex-col items-center md:h-screen md:overflow-y-auto"
       >
         {/* Mobile hero video — fullbleed at top so the cinematic feel carries on phones. */}
-        <div className="relative h-[70vh] w-full overflow-hidden md:hidden">
+        <div className="relative h-[55vh] w-full overflow-hidden md:hidden">
           <HeroVideoPanel videos={HERO_VIDEOS} />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-ink" />
         </div>
@@ -174,7 +174,7 @@ function Nav() {
         <img
           src={chLogo.url}
           alt="ConsciousHoops"
-          className="h-24 w-auto"
+          className="h-16 w-auto md:h-24"
           style={{ clipPath: "inset(10%)" }}
         />
       </a>
@@ -214,7 +214,7 @@ function Hero({ scrollRef }: { scrollRef: React.RefObject<HTMLDivElement | null>
       </motion.p>
 
       <motion.h1
-        style={{ y, fontSize: "clamp(42px, 7.2vw, 84px)" }}
+        style={{ y, fontSize: "clamp(30px, 7.2vw, 84px)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -292,16 +292,16 @@ function SessionFacts() {
 
   return (
     <section className="mt-24 -mx-6 md:-mx-16">
-      <div className="flex flex-row items-start justify-between gap-8 border-y border-white/10 py-8">
+      <div className="flex flex-row items-start justify-between gap-3 border-y border-white/10 py-8 md:gap-8">
         {stats.map((s) => (
           <div key={s.label} className="flex-1 text-center">
             <div
               className="whitespace-nowrap font-display font-bold leading-none text-cream"
-              style={{ fontSize: "clamp(25px, 3.6vw, 45px)", letterSpacing: "-0.03em" }}
+              style={{ fontSize: "clamp(15px, 3.6vw, 45px)", letterSpacing: "-0.03em" }}
             >
               {s.value}
             </div>
-            <div className="mt-3 text-[13px] font-medium uppercase tracking-[0.18em] text-muted-text">
+            <div className="mt-3 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-text md:text-[13px] md:tracking-[0.18em]">
               {s.label}
             </div>
           </div>
@@ -377,7 +377,11 @@ function Partners() {
         aria-label="Ašva"
         className="mt-2 inline-flex items-center justify-center transition-opacity hover:opacity-80"
       >
-        <img src={asvaLogo.url} alt="Ašva" className="h-[300px] w-auto" />
+        <img
+          src={asvaLogo.url}
+          alt="Ašva"
+          className="h-[200px] w-auto max-w-[85vw] object-contain md:h-[300px] md:max-w-none"
+        />
       </a>
     </section>
   );
@@ -581,7 +585,10 @@ function SponsorshipSuccess() {
 
 function FooterCTA() {
   return (
-    <section className="relative mt-24 w-full overflow-hidden bg-ink-2 px-6 pb-32 pt-20 text-center md:px-12">
+    <section
+      className="relative mt-24 w-full overflow-hidden bg-ink-2 px-6 pt-20 text-center md:px-12"
+      style={{ paddingBottom: "calc(8rem + env(safe-area-inset-bottom))" }}
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-terra/60 to-transparent"
