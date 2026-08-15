@@ -434,19 +434,34 @@ function Partners() {
       <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-text">
         In partnership with
       </p>
-      <a
-        href="https://asva.life/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Ašva"
-        className="mt-2 inline-flex items-center justify-center transition-opacity hover:opacity-80"
-      >
-        <img
-          src={asvaLogo.url}
-          alt="Ašva"
-          className="h-[200px] w-auto max-w-[85vw] object-contain md:h-[300px] md:max-w-none"
-        />
-      </a>
+      <div className="mt-4 flex flex-col items-center justify-center gap-8 md:mt-6 md:flex-row md:gap-16">
+        <a
+          href="https://asva.life/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Ašva"
+          className="inline-flex items-center justify-center transition-opacity hover:opacity-80"
+        >
+          <img
+            src={asvaLogo.url}
+            alt="Ašva"
+            className="h-[180px] w-auto max-w-[70vw] object-contain md:h-[240px] md:max-w-none"
+          />
+        </a>
+        <a
+          href="https://consciousfuturesociety.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="The Conscious Future Society"
+          className="inline-flex items-center justify-center transition-opacity hover:opacity-80"
+        >
+          <img
+            src="/assets/thecfs-logo.png"
+            alt="The Conscious Future Society"
+            className="h-[180px] w-auto max-w-[70vw] object-contain md:h-[240px] md:max-w-none"
+          />
+        </a>
+      </div>
     </section>
   );
 }
