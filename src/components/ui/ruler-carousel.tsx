@@ -232,7 +232,7 @@ export function RulerCarousel({
                 key={item.id}
                 type="button"
                 onClick={() => handleItemClick(index)}
-                className={`flex shrink-0 items-center justify-center whitespace-nowrap font-display text-xl font-bold uppercase tracking-[-0.02em] sm:text-3xl md:text-5xl ${
+                className={`flex shrink-0 items-center justify-center whitespace-nowrap px-2 font-display text-lg font-bold uppercase tracking-[-0.02em] sm:text-2xl md:text-4xl ${
                   isActive ? "text-cream" : "text-muted-text hover:text-cream"
                 }`}
                 animate={{
