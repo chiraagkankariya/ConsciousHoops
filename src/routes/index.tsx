@@ -449,7 +449,7 @@ function Partners() {
           />
         </a>
         <a
-          href="https://consciousfuturesociety.com"
+          href="https://theconsciousfuturesociety.com/"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="The Conscious Future Society"
