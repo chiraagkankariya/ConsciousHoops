@@ -58,18 +58,19 @@ const EVENT_PHOTOS: GalleryPhoto[] = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ConsciousHoops — Wellness Pick-up Basketball in Boston" },
+      { title: "ConsciousHoops" },
       {
         name: "description",
         content:
           "A monthly pick-up basketball community in Boston for people in the wellness, meditation, and consciousness space. Competition meets mindfulness. Let's hoop!",
       },
-      { property: "og:title", content: "ConsciousHoops — Where the court meets the mind" },
+      { property: "og:title", content: "ConsciousHoops" },
       {
         property: "og:description",
         content:
           "Monthly pick-up runs in Boston for founders, researchers, therapists, and meditators who love basketball.",
       },
+      { name: "twitter:title", content: "ConsciousHoops" },
     ],
   }),
   component: Index,
