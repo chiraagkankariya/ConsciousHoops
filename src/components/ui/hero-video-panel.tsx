@@ -23,23 +23,53 @@ export default function HeroVideoPanel({ videos }: Props) {
     return () => clearTimeout(timer);
   }, [index, videos.length]);
 
-  // Force play() on every src change. iOS occasionally ignores the autoplay
-  // attribute (Low Power Mode, race with playsInline); fall back to the first
-  // user gesture if the promise rejects.
+  // Force play() on every src change. iOS Safari reads `muted`/`playsInline`
+  // as DOM properties (not just JSX attributes) when deciding to allow
+  // autoplay, and it wants an explicit .load() when the src swaps. If autoplay
+  // still gets blocked (Low Power Mode, aggressive data-saver), any user
+  // interaction retries the play.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+    v.autoplay = true;
+    try {
+      v.load();
+    } catch {
+      /* ignore */
+    }
+
     const attempt = () => {
       const p = v.play();
       if (p && typeof p.catch === "function") p.catch(() => {});
     };
     attempt();
-    const onFirstGesture = () => attempt();
-    document.addEventListener("touchstart", onFirstGesture, { once: true, passive: true });
-    document.addEventListener("click", onFirstGesture, { once: true });
+
+    // Retry on any first sign of user activity or when the tab becomes visible.
+    const onGesture = () => attempt();
+    const onVisibility = () => {
+      if (!document.hidden) attempt();
+    };
+    const opts = { once: true, passive: true } as const;
+    document.addEventListener("touchstart", onGesture, opts);
+    document.addEventListener("touchend", onGesture, opts);
+    document.addEventListener("pointerdown", onGesture, opts);
+    document.addEventListener("click", onGesture, { once: true });
+    document.addEventListener("scroll", onGesture, opts);
+    document.addEventListener("keydown", onGesture, { once: true });
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
-      document.removeEventListener("touchstart", onFirstGesture);
-      document.removeEventListener("click", onFirstGesture);
+      document.removeEventListener("touchstart", onGesture);
+      document.removeEventListener("touchend", onGesture);
+      document.removeEventListener("pointerdown", onGesture);
+      document.removeEventListener("click", onGesture);
+      document.removeEventListener("scroll", onGesture);
+      document.removeEventListener("keydown", onGesture);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [index, videos]);
 
