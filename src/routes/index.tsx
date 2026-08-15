@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion"
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import chLogo from "@/assets/conscioushoops-logo.png.asset.json";
-import chLogoTransparent from "@/assets/conscioushoops-logo-transparent.png.asset.json";
 import asvaLogo from "@/assets/asva-logo.png.asset.json";
 import WireframeBasketball from "@/components/ui/wireframe-basketball";
 import { RulerCarousel, type CarouselItem } from "@/components/ui/ruler-carousel";
@@ -603,7 +602,7 @@ function Sponsorship() {
 }
 
 function SponsorshipSuccess() {
-  const fullText = "Thanks! We'll be in touch soon.";
+  const fullText = "Nothing but net.";
   const [typed, setTyped] = useState("");
   const [showSecondary, setShowSecondary] = useState(false);
 
@@ -617,8 +616,8 @@ function SponsorshipSuccess() {
           clearInterval(interval);
           setTimeout(() => setShowSecondary(true), 200);
         }
-      }, 40);
-    }, 500);
+      }, 55);
+    }, 400);
     return () => clearTimeout(startTimer);
   }, []);
 
@@ -629,23 +628,9 @@ function SponsorshipSuccess() {
       transition={{ duration: 0.3, delay: 0.1 }}
       className="flex min-h-[420px] w-full flex-col items-center justify-center text-center"
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        style={{ backgroundColor: "#faf6ef" }}
-        className="inline-flex items-center justify-center rounded-2xl px-6 py-5 shadow-[0_16px_50px_-20px_rgba(0,0,0,0.7)] ring-1 ring-black/5"
-      >
-        <img
-          src={chLogoTransparent.url}
-          alt="ConsciousHoops"
-          style={{ width: 284 }}
-          className="h-auto"
-        />
-      </motion.div>
       <p
-        className="mt-6 font-display text-xl font-medium text-cream"
-        style={{ minHeight: "1.5em" }}
+        className="font-display font-bold uppercase leading-none tracking-[-0.02em] text-cream"
+        style={{ fontSize: "clamp(38px, 5.5vw, 64px)", minHeight: "1.1em" }}
       >
         {typed}
         <span className="text-terra">{typed.length < fullText.length ? "|" : ""}</span>
@@ -654,9 +639,9 @@ function SponsorshipSuccess() {
         initial={{ opacity: 0 }}
         animate={{ opacity: showSecondary ? 1 : 0 }}
         transition={{ duration: 0.4 }}
-        className="mt-3 text-[11px] uppercase tracking-[0.24em] text-muted-text"
+        className="mt-6 text-[11px] uppercase tracking-[0.24em] text-muted-text"
       >
-        We'll reach out before the next session.
+        Ball's in our court — we'll get back to you before the next run.
       </motion.p>
     </motion.div>
   );
