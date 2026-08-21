@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import chLogo from "@/assets/conscioushoops-logo-transparent.png.asset.json";
+import chLogo from "@/assets/conscioushoops-logo.png.asset.json";
 
 const RING_RADIUS = 92;
 const RING_CIRCUM = 2 * Math.PI * RING_RADIUS;
@@ -21,6 +21,7 @@ export default function LoadingScreen({ progress }: { progress: number }) {
         src={chLogo.url}
         alt="ConsciousHoops"
         className="h-[112px] w-auto md:h-[134px]"
+        style={{ clipPath: "inset(10%)" }}
       />
 
       <div className="relative flex h-[220px] w-[220px] items-center justify-center">

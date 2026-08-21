@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "rea
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import chLogo from "@/assets/conscioushoops-logo-transparent.png.asset.json";
+import chLogo from "@/assets/conscioushoops-logo.png.asset.json";
 import asvaLogo from "@/assets/asva-logo.png.asset.json";
 import WireframeBasketball from "@/components/ui/wireframe-basketball";
 import { RulerCarousel, type CarouselItem } from "@/components/ui/ruler-carousel";
@@ -231,9 +231,15 @@ function Nav() {
     <nav className="mx-auto flex max-w-2xl items-center justify-center px-6 py-6 md:px-12">
       <a
         href="#top"
-        className="inline-flex items-center transition-opacity hover:opacity-80"
+        style={{ backgroundColor: "#faf6ef" }}
+        className="inline-flex items-center rounded-lg p-0.5 shadow-[0_8px_28px_-12px_rgba(0,0,0,0.55)] ring-1 ring-black/5 transition-transform hover:-translate-y-[1px]"
       >
-        <img src={chLogo.url} alt="ConsciousHoops" className="h-16 w-auto md:h-24" />
+        <img
+          src={chLogo.url}
+          alt="ConsciousHoops"
+          className="h-16 w-auto md:h-24"
+          style={{ clipPath: "inset(10%)" }}
+        />
       </a>
     </nav>
   );
