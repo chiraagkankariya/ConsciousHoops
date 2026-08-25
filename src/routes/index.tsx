@@ -349,7 +349,7 @@ function Hero({ scrollRef }: { scrollRef: React.RefObject<HTMLDivElement | null>
 function SessionFacts() {
   const stats = [
     { value: "1×", label: "Per month" },
-    { value: "10AM – 12PM", label: "Saturday" },
+    { value: "10AM – 12PM", label: "" },
     { value: "Limited", label: "Players per run" },
   ];
 
@@ -357,7 +357,7 @@ function SessionFacts() {
     <section className="mt-24 -mx-6 md:-mx-16">
       <div className="flex flex-row items-start justify-between gap-3 border-y border-white/10 py-8 md:gap-8">
         {stats.map((s) => (
-          <div key={s.label} className="flex-1 text-center">
+          <div key={s.value} className="flex-1 text-center">
             <div
               className="whitespace-nowrap font-display font-bold leading-none text-cream"
               style={{ fontSize: "clamp(15px, 3.6vw, 45px)", letterSpacing: "-0.03em" }}
