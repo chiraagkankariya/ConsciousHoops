@@ -31,7 +31,7 @@ import p16 from "@/assets/IMG_3106.jpg.asset.json";
 import p17 from "@/assets/IMG_3080.jpg.asset.json";
 import p18 from "@/assets/IMG_3079.jpg.asset.json";
 
-const LUMA_URL = "https://luma.com/m3lwxeg8";
+const LUMA_URL = "https://luma.com/2uclkdk5";
 
 const EVENT_PHOTOS: GalleryPhoto[] = [
   { src: p3.url, alt: "Players contest a jump shot during the first ConsciousHoops run" },
