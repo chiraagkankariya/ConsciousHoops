@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -12,6 +12,7 @@ import HeroVideoPanel from "@/components/ui/hero-video-panel";
 import EchoText from "@/components/ui/echo-text";
 import LoadingScreen from "@/components/ui/loading-screen";
 import { HERO_VIDEOS } from "@/lib/hero-videos";
+import { LUMA_URL } from "@/lib/constants";
 import p1 from "@/assets/IMG_2995.jpg.asset.json";
 import p2 from "@/assets/IMG_3005.jpg.asset.json";
 import p3 from "@/assets/IMG_3007.jpg.asset.json";
@@ -30,8 +31,6 @@ import p15 from "@/assets/IMG_3061.jpg.asset.json";
 import p16 from "@/assets/IMG_3106.jpg.asset.json";
 import p17 from "@/assets/IMG_3080.jpg.asset.json";
 import p18 from "@/assets/IMG_3079.jpg.asset.json";
-
-const LUMA_URL = "https://luma.com/2uclkdk5";
 
 const EVENT_PHOTOS: GalleryPhoto[] = [
   { src: p3.url, alt: "Players contest a jump shot during the first ConsciousHoops run" },
@@ -228,7 +227,7 @@ function FadeIn({ children }: { children: ReactNode }) {
 
 function Nav() {
   return (
-    <nav className="mx-auto flex max-w-2xl items-center justify-center px-6 py-6 md:px-12">
+    <nav className="relative mx-auto flex max-w-2xl items-center justify-center px-6 py-6 md:px-12">
       <a
         href="#top"
         style={{ backgroundColor: "#faf6ef" }}
@@ -241,6 +240,12 @@ function Nav() {
           style={{ clipPath: "inset(10%)" }}
         />
       </a>
+      <Link
+        to="/about"
+        className="absolute right-6 top-1/2 -translate-y-1/2 border-b-2 border-[#C4613A] pb-[3px] text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-text transition-all duration-200 hover:border-transparent hover:text-cream md:right-12"
+      >
+        About
+      </Link>
     </nav>
   );
 }
@@ -663,9 +668,13 @@ function FooterCTA() {
       <div className="mt-8">
         <RegisterButton />
       </div>
-      <p className="mt-10 text-[10px] uppercase tracking-[0.28em] text-muted-text">
-        © 2026 ConsciousHoops · Boston, MA
-      </p>
+      <div className="mt-10 flex items-center justify-center gap-5 text-[10px] uppercase tracking-[0.28em] text-muted-text">
+        <Link to="/about" className="transition-colors hover:text-cream">
+          About
+        </Link>
+        <span aria-hidden>·</span>
+        <span>© 2026 ConsciousHoops · Boston, MA</span>
+      </div>
     </section>
   );
 }
