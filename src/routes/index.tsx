@@ -354,7 +354,6 @@ function Hero({ scrollRef }: { scrollRef: React.RefObject<HTMLDivElement | null>
 function SessionFacts() {
   const stats = [
     { value: "1×", label: "Per month" },
-    { value: "10AM – 12PM", label: "" },
     { value: "Limited", label: "Players per run" },
   ];
 
@@ -402,7 +401,7 @@ function FirstRun() {
         Limited players. Two hours of run. One meditation together.
       </p>
       <p className="mt-5 text-[11px] uppercase tracking-[0.24em] text-muted-text">
-        Next session — September 26, 2026 · New York City
+        Next session — October 24, 2026 · New Jersey
       </p>
     </section>
   );
