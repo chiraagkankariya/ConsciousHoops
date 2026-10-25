@@ -84,7 +84,7 @@ function ScatteredIcons() {
             width: `${it.size}px`,
             height: `${it.size}px`,
             transform: `translate(-50%, -50%) rotate(${it.rot}deg)`,
-            opacity: 0.15,
+            opacity: 0.1,
             backgroundColor: "#6B6B6B",
             maskImage: `url(${it.img})`,
             WebkitMaskImage: `url(${it.img})`,
