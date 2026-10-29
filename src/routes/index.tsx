@@ -185,12 +185,6 @@ function Index() {
               <WhosInvited />
             </FadeIn>
             <FadeIn>
-              <FirstRun />
-            </FadeIn>
-            <FadeIn>
-              <Ethos />
-            </FadeIn>
-            <FadeIn>
               <Partners />
             </FadeIn>
             <motion.div
@@ -261,8 +255,102 @@ function RegisterButton({ className, children }: { className?: string; children?
         className
       )}
     >
-      {children ?? "Register now"} <ArrowRight className="h-4 w-4" />
+      {children ?? "Upcoming hoops"} <ArrowRight className="h-4 w-4" />
     </a>
+  );
+}
+
+function CTAStack() {
+  const [showForm, setShowForm] = useState(false);
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!/^\S+@\S+\.\S+$/.test(trimmed)) {
+      setErrorMsg("Please add a valid email.");
+      setStatus("error");
+      return;
+    }
+    setStatus("submitting");
+    setErrorMsg("");
+    try {
+      const res = await fetch("https://formspree.io/f/mzeevygo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: trimmed,
+          _subject: "New ConsciousHoops community signup",
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean };
+      if (!res.ok || data.ok !== true) throw new Error("Formspree error");
+      setStatus("success");
+      setEmail("");
+    } catch {
+      setStatus("error");
+      setErrorMsg("Something went wrong. Please try again.");
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <RegisterButton />
+        <button
+          type="button"
+          onClick={() => setShowForm((v) => !v)}
+          aria-expanded={showForm}
+          className="inline-flex items-center rounded-full bg-cream px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.15em] text-ink transition-colors hover:bg-white"
+        >
+          Join the community
+        </button>
+      </div>
+      <AnimatePresence initial={false}>
+        {showForm && (
+          <motion.div
+            key="community-form"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full max-w-md overflow-hidden"
+          >
+            {status === "success" ? (
+              <p className="pt-2 text-center text-sm text-cream">
+                You're on the list — see you on the court.
+              </p>
+            ) : (
+              <form onSubmit={onSubmit} className="flex flex-col gap-2 pt-2 sm:flex-row">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your email"
+                  maxLength={120}
+                  className="flex-1 rounded-full border border-white/15 bg-transparent px-5 py-3 text-sm text-cream placeholder:text-muted-text focus:border-terra focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  className="btn-terra rounded-full bg-terra px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-cream hover:bg-terra-light disabled:opacity-60"
+                >
+                  {status === "submitting" ? "Sending..." : "Submit"}
+                </button>
+              </form>
+            )}
+            {status === "error" && errorMsg && (
+              <p className="mt-2 text-center text-sm text-terra-light">{errorMsg}</p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -345,7 +433,7 @@ function Hero({ scrollRef }: { scrollRef: React.RefObject<HTMLDivElement | null>
       </p>
 
       <div className="mt-8">
-        <RegisterButton />
+        <CTAStack />
       </div>
     </section>
   );
@@ -386,46 +474,6 @@ function WhosInvited() {
       </p>
       <div className="mt-6">
         <RulerCarousel originalItems={INVITEE_ROLES} />
-      </div>
-    </section>
-  );
-}
-
-function FirstRun() {
-  return (
-    <section className="mt-24">
-      <p
-        className="font-display font-medium leading-[1.05] tracking-[-0.02em] text-cream"
-        style={{ fontSize: "clamp(28px, 4.2vw, 40px)" }}
-      >
-        Limited players. Two hours of run. One meditation together.
-      </p>
-      <p className="mt-5 text-[11px] uppercase tracking-[0.24em] text-muted-text">
-        Next session — October 24, 2026 · New Jersey
-      </p>
-    </section>
-  );
-}
-
-function Ethos() {
-  return (
-    <section className="mt-24">
-      <div
-        className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-left backdrop-blur-sm"
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-6 -top-8 select-none font-display text-[140px] font-bold leading-none text-terra opacity-20"
-        >
-          "
-        </div>
-        <p className="font-display text-xl font-medium leading-relaxed text-cream md:text-2xl">
-          Keep it competitive. Keep it clean. The game gets intense — we just ask that you leave the
-          toxicity at the door.
-        </p>
-        <footer className="mt-6 text-[11px] uppercase tracking-[0.24em] text-muted-text">
-          — The ConsciousHoops ethos
-        </footer>
       </div>
     </section>
   );
@@ -665,7 +713,7 @@ function FooterCTA() {
         Let's Hoop.
       </p>
       <div className="mt-8">
-        <RegisterButton />
+        <CTAStack />
       </div>
       <div className="mt-10 flex items-center justify-center gap-5 text-[10px] uppercase tracking-[0.28em] text-muted-text">
         <Link to="/about" className="transition-colors hover:text-cream">
